@@ -13,51 +13,91 @@
 <div style="background:var(--cream);min-height:60vh">
   <div class="container section">
 
-    <div class="sec-tag">&#x1F6D2; {{ collection.title }}</div>
-    <h1 class="sec-h">{{ collection.title }} <em>productos</em></h1>
+    <div class="sec-tag">&#x1F43E; {{ collection.title | default: 'Todos los productos' }}</div>
+    <h1 class="sec-h">{{ collection.title | default: 'Todos los' }} <em>productos</em></h1>
 
     {% if collection.products_count == 0 %}
       <p style="color:var(--gray);text-align:center;padding:60px 0;font-size:15px">
         No hay productos en esta coleccion todavia.
       </p>
     {% else %}
-      <div class="prod-grid">
+      <div style="display:flex;flex-direction:column;gap:40px">
         {% for product in collection.products %}
-          <div class="prod-card">
-            <div class="prod-img">
-              {% if product.featured_image %}
-                <img src="{{ product.featured_image | img_url: '500x500' }}"
-                     alt="{{ product.title | escape }}"
-                     loading="lazy"
-                     style="width:100%;height:100%;object-fit:cover">
+
+          <div style="background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 2px 20px rgba(44,31,20,.07);display:grid;grid-template-columns:1fr 1fr;align-items:stretch">
+
+            <!-- IMÁGENES -->
+            <div style="background:var(--warm);display:flex;flex-direction:column;gap:2px">
+              {% assign images = product.images %}
+              {% if images.size > 0 %}
+                <div style="flex:2;overflow:hidden">
+                  <img src="{{ images[0] | img_url: '800x800', crop: 'center' }}"
+                       alt="{{ product.title | escape }}"
+                       style="width:100%;height:100%;object-fit:cover;display:block">
+                </div>
+                {% if images.size > 1 %}
+                  <div style="display:grid;grid-template-columns:repeat({{ images.size | minus: 1 | at_most: 3 }},1fr);gap:2px">
+                    {% for image in images offset:1 limit:3 %}
+                      <img src="{{ image | img_url: '400x300', crop: 'center' }}"
+                           alt="{{ product.title | escape }}"
+                           style="width:100%;height:120px;object-fit:cover;display:block">
+                    {% endfor %}
+                  </div>
+                {% endif %}
               {% else %}
-                <span style="font-size:60px">&#x1F43E;</span>
+                <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:80px;padding:40px">&#x1F43E;</div>
               {% endif %}
-              {% if product.compare_at_price > product.price %}
-                <span class="prod-badge b-sale">Oferta</span>
-              {% endif %}
-              <a href="{{ product.url }}" class="prod-ver">&#x1F43E; Comprar ahora</a>
             </div>
-            <div class="prod-info">
+
+            <!-- INFO -->
+            <div style="padding:32px;display:flex;flex-direction:column;gap:16px;justify-content:center">
+              {% if product.compare_at_price > product.price %}
+                <span style="background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:4px 12px;border-radius:999px;width:fit-content;text-transform:uppercase">Oferta</span>
+              {% endif %}
+
               <div class="prod-brand">{{ product.type | default: 'PawLove' }}</div>
-              <div class="prod-name">{{ product.title }}</div>
+              <h2 style="font-family:'Fraunces',serif;font-size:clamp(20px,3vw,32px);font-weight:900;line-height:1.1;color:var(--brown)">
+                {{ product.title }}
+              </h2>
+
               <div class="prod-prices">
-                <span class="pp-now">{{ product.price | money }}</span>
+                <span class="pp-now" style="font-size:26px">{{ product.price | money }}</span>
                 {% if product.compare_at_price > product.price %}
                   <span class="pp-old">{{ product.compare_at_price | money }}</span>
                   {% assign saved = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
                   <span class="pp-save">-{{ saved }}%</span>
                 {% endif %}
               </div>
+
+              {% if product.description != blank %}
+                <p style="font-size:14px;color:var(--gray);line-height:1.8">
+                  {{ product.description | strip_html | truncate: 300 }}
+                </p>
+              {% endif %}
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+                {% form 'product', product %}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  <button type="submit" name="checkout" class="btn-primary">
+                    &#x1F43E; Comprar ahora — {{ product.price | money }}
+                  </button>
+                {% endform %}
+                <a href="{{ product.url }}" class="btn-secondary">Ver mas fotos</a>
+              </div>
+
+              <div style="background:var(--warm);border-radius:12px;padding:12px 16px;font-size:12px;color:var(--gray)">
+                &#x1F4E6; Entrega 8-18 dias · Gratis en pedidos +40€
+              </div>
             </div>
+
           </div>
+
         {% endfor %}
       </div>
     {% endif %}
 
-    <div style="text-align:center;margin-top:40px">
+    <div style="text-align:center;margin-top:48px">
       <a href="{{ routes.root_url }}" class="btn-secondary">&#x2190; Volver al inicio</a>
-      <a href="/collections/all" class="btn-primary" style="margin-left:12px">Ver todos &#x1F43E;</a>
     </div>
 
   </div>
