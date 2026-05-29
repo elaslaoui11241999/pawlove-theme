@@ -52,23 +52,36 @@
   <div class="pdp-wrap">
     <div>
       {% if product.featured_image %}
-        <img id="mainImg" class="pdp-img-main" src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title | escape }}">
+        <img id="mainImg" class="pdp-img-main"
+             src="{{ product.featured_image | img_url: '800x' }}"
+             alt="{{ product.title | escape }}">
       {% else %}
         <div class="pdp-img-main" style="display:flex;align-items:center;justify-content:center;font-size:80px">&#x1F43E;</div>
       {% endif %}
       {% if product.images.size > 1 %}
         <div class="pdp-thumbs">
           {% for image in product.images limit: 12 %}
-            <img src="{{ image | img_url: '160x160' }}" data-full="{{ image | img_url: '800x' }}" alt="{{ product.title | escape }}" class="{% if forloop.first %}on{% endif %}" onclick="swImg(this)">
+            <img src="{{ image | img_url: '160x160' }}"
+                 data-full="{{ image | img_url: '800x' }}"
+                 alt="{{ product.title | escape }}"
+                 class="{% if forloop.first %}on{% endif %}"
+                 onclick="swImg(this)">
           {% endfor %}
         </div>
       {% endif %}
     </div>
+
     <div class="pdp-info">
       <div class="prod-brand">{{ product.type | default: 'PawLove' }}</div>
       <h1 style="font-family:'Fraunces',serif;font-size:clamp(20px,3vw,34px);font-weight:900;line-height:1.1;color:var(--brown)">{{ product.title }}</h1>
       <div style="color:var(--gold);font-size:15px">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
-      <div class="oferta-banner"><div class="oferta-line"></div><span class="oferta-text">&#x26A1; Oferta por tiempo limitado</span><div class="oferta-line"></div></div>
+
+      <div class="oferta-banner">
+        <div class="oferta-line"></div>
+        <span class="oferta-text">&#x26A1; Oferta por tiempo limitado</span>
+        <div class="oferta-line"></div>
+      </div>
+
       <div class="cdw-wrap">
         <div class="cdw-label">La oferta termina en</div>
         <div class="cdw-nums">
@@ -79,34 +92,73 @@
           <div class="cdw-block"><div class="cdw-n" id="cd-s">00</div><div class="cdw-l">Seg</div></div>
         </div>
       </div>
+
       {% if product.variants.size > 1 %}
-        <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:10px" id="variantList">
           {% for variant in product.variants %}
-            <div class="var-card {% if forloop.first %}selected{% endif %}" onclick="selectVariant(this,'{{ variant.id }}')" data-id="{{ variant.id }}">
+            <div class="var-card {% if forloop.first %}selected{% endif %}"
+                 onclick="selectVariant(this,'{{ variant.id }}','{{ variant.price | money }}')"
+                 data-id="{{ variant.id }}">
               {% if forloop.index == 2 %}<div class="var-badge">Mas popular</div>{% endif %}
               <div class="var-radio"></div>
               <div class="var-name">{{ variant.title }}</div>
-              <div><div class="var-price">{{ variant.price | money }}</div>{% if variant.compare_at_price > variant.price %}<div class="var-old">{{ variant.compare_at_price | money }}</div>{% endif %}</div>
+              <div>
+                <div class="var-price">{{ variant.price | money }}</div>
+                {% if variant.compare_at_price > variant.price %}
+                  <div class="var-old">{{ variant.compare_at_price | money }}</div>
+                {% endif %}
+              </div>
             </div>
           {% endfor %}
         </div>
       {% else %}
         <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:var(--brown)">{{ product.price | money }}</div>
       {% endif %}
+
       {% if product.description != blank %}
-        <div style="font-size:13px;color:var(--gray);line-height:1.8;border-top:1px solid rgba(44,31,20,.07);padding-top:12px">{{ product.description | truncate: 350 }}</div>
+        <div style="font-size:13px;color:var(--gray);line-height:1.8;border-top:1px solid rgba(44,31,20,.07);padding-top:12px">
+          {{ product.description | truncate: 350 }}
+        </div>
       {% endif %}
+
       {% form 'product', product %}
         <input type="hidden" name="id" id="selectedVariant" value="{{ product.selected_or_first_available_variant.id }}">
-        <button type="submit" name="checkout" class="pay-btn pay-card">&#x1F4B3; Pagar con tarjeta</button>
+        <button type="submit" name="checkout" class="pay-btn pay-card">
+          &#x1F4B3; Pagar con tarjeta
+        </button>
       {% endform %}
-      <div style="background:var(--warm);border-radius:14px;padding:14px 18px;font-size:13px;color:var(--gray);line-height:1.8"><strong style="color:var(--brown);display:block;margin-bottom:4px">&#x1F4E6; Envio</strong>Entrega 8-18 dias - Gratis en pedidos +40</div>
+
+      <div style="background:var(--warm);border-radius:14px;padding:14px 18px;font-size:13px;color:var(--gray);line-height:1.8">
+        <strong style="color:var(--brown);display:block;margin-bottom:4px">&#x1F4E6; Envio</strong>
+        Entrega 8-18 dias &#x00B7; Gratis en pedidos +40&#x20AC;
+      </div>
+
       <a href="javascript:history.back()" style="font-size:13px;color:var(--gray);text-align:center;display:block">&#x2190; Volver</a>
     </div>
   </div>
 </div>
+
 <script>
-function swImg(t){document.getElementById('mainImg').src=t.dataset.full;document.querySelectorAll('.pdp-thumbs img').forEach(i=>i.classList.remove('on'));t.classList.add('on');}
-function selectVariant(card,id){document.querySelectorAll('.var-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');document.getElementById('selectedVariant').value=id;}
-(function(){function pad(n){return String(n).padStart(2,'0')}function tick(){var now=new Date(),end=new Date(now);end.setHours(23,59,59,0);var d=Math.max(0,Math.floor((end-now)/1000));document.getElementById('cd-h').textContent=pad(Math.floor(d/3600));document.getElementById('cd-m').textContent=pad(Math.floor((d%3600)/60));document.getElementById('cd-s').textContent=pad(d%60);}tick();setInterval(tick,1000);})();
+function swImg(t){
+  document.getElementById('mainImg').src=t.dataset.full;
+  document.querySelectorAll('.pdp-thumbs img').forEach(i=>i.classList.remove('on'));
+  t.classList.add('on');
+}
+function selectVariant(card,id,price){
+  document.querySelectorAll('.var-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('selectedVariant').value=id;
+}
+(function(){
+  function pad(n){return String(n).padStart(2,'0')}
+  function tick(){
+    var now=new Date(),end=new Date(now);
+    end.setHours(23,59,59,0);
+    var d=Math.max(0,Math.floor((end-now)/1000));
+    document.getElementById('cd-h').textContent=pad(Math.floor(d/3600));
+    document.getElementById('cd-m').textContent=pad(Math.floor((d%3600)/60));
+    document.getElementById('cd-s').textContent=pad(d%60);
+  }
+  tick();setInterval(tick,1000);
+})();
 </script>
