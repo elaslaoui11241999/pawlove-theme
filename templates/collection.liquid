@@ -1,3 +1,9 @@
+<style>
+@media(max-width:700px){
+  .col-card { grid-template-columns:1fr !important; }
+  .col-card > div:first-child img { max-height:280px; }
+}
+</style>
 <nav class="navbar">
   <a href="{{ routes.root_url }}" class="nb-logo">
     <span class="paw">&#x1F43E;</span>Paw<span>Love</span>
@@ -24,7 +30,7 @@
       <div style="display:flex;flex-direction:column;gap:40px">
         {% for product in collection.products %}
 
-          <div style="background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 2px 20px rgba(44,31,20,.07);display:grid;grid-template-columns:1fr 1fr;align-items:stretch">
+          <div class="col-card" style="background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 2px 20px rgba(44,31,20,.07);display:grid;grid-template-columns:1fr 1fr;align-items:stretch">
 
             <!-- IMÁGENES -->
             <div style="background:var(--warm);display:flex;flex-direction:column;gap:2px">
