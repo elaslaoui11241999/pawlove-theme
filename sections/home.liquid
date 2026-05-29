@@ -133,12 +133,41 @@
     <div class="sec-tag">&#x1F43E; Explora</div>
     <h2 class="sec-h">Encuentra lo que necesita<br>tu <em>companero</em></h2>
     <div class="cat-grid">
-      <div class="cat-card" onclick="filterCat('Higiene')"><div class="cat-ico">&#x1FAA5;</div><div class="cat-nm">Higiene</div><div class="cat-ct">3 productos</div></div>
-      <div class="cat-card" onclick="filterCat('Juguetes')"><div class="cat-ico">&#x1F3BE;</div><div class="cat-nm">Juguetes</div><div class="cat-ct">2 productos</div></div>
-      <div class="cat-card" onclick="filterCat('Paseos')"><div class="cat-ico">&#x1F9AE;</div><div class="cat-nm">Paseos</div><div class="cat-ct">2 productos</div></div>
-      <div class="cat-card" onclick="filterCat('Perros')"><div class="cat-ico">&#x1F436;</div><div class="cat-nm">Perros</div><div class="cat-ct">5 productos</div></div>
-      <div class="cat-card" onclick="filterCat('Gatos')"><div class="cat-ico">&#x1F431;</div><div class="cat-nm">Gatos</div><div class="cat-ct">2 productos</div></div>
-      <div class="cat-card" onclick="filterCat('')"><div class="cat-ico">&#x2728;</div><div class="cat-nm">Ver todo</div><div class="cat-ct">7 productos</div></div>
+      {% assign c_higiene = collections['higiene'] %}
+      {% assign c_juguetes = collections['juguetes'] %}
+      {% assign c_paseos = collections['paseos'] %}
+      {% assign c_perros = collections['perros'] %}
+      {% assign c_gatos = collections['gatos'] %}
+      <a href="/collections/higiene" class="cat-card">
+        <div class="cat-ico">&#x1FAA5;</div>
+        <div class="cat-nm">Higiene</div>
+        <div class="cat-ct">{% if c_higiene %}{{ c_higiene.products_count }}{% else %}0{% endif %} productos</div>
+      </a>
+      <a href="/collections/juguetes" class="cat-card">
+        <div class="cat-ico">&#x1F3BE;</div>
+        <div class="cat-nm">Juguetes</div>
+        <div class="cat-ct">{% if c_juguetes %}{{ c_juguetes.products_count }}{% else %}0{% endif %} productos</div>
+      </a>
+      <a href="/collections/paseos" class="cat-card">
+        <div class="cat-ico">&#x1F9AE;</div>
+        <div class="cat-nm">Paseos</div>
+        <div class="cat-ct">{% if c_paseos %}{{ c_paseos.products_count }}{% else %}0{% endif %} productos</div>
+      </a>
+      <a href="/collections/perros" class="cat-card">
+        <div class="cat-ico">&#x1F436;</div>
+        <div class="cat-nm">Perros</div>
+        <div class="cat-ct">{% if c_perros %}{{ c_perros.products_count }}{% else %}0{% endif %} productos</div>
+      </a>
+      <a href="/collections/gatos" class="cat-card">
+        <div class="cat-ico">&#x1F431;</div>
+        <div class="cat-nm">Gatos</div>
+        <div class="cat-ct">{% if c_gatos %}{{ c_gatos.products_count }}{% else %}0{% endif %} productos</div>
+      </a>
+      <a href="/collections/all" class="cat-card">
+        <div class="cat-ico">&#x2728;</div>
+        <div class="cat-nm">Ver todo</div>
+        <div class="cat-ct">{{ collections.all.products_count }} productos</div>
+      </a>
     </div>
   </div>
 </div>
