@@ -81,19 +81,15 @@ function closeModal(e){if(e.target===document.getElementById('overlay'))closeMod
 function closeModalDirect(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow=''}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect()});
 
-/* ADD TO CART via Shopify AJAX API */
+/* COMPRAR AHORA - añade al carrito y va directo a checkout */
 function addToCart(variantId,name){
   fetch('/cart/add.js',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({id:variantId,quantity:1})
   }).then(r=>r.json()).then(()=>{
-    return fetch('/cart.js').then(r=>r.json());
-  }).then(cart=>{
-    document.getElementById('cartCount').textContent=cart.item_count;
-    showToast('🐾 '+name+' añadido al carrito');
-    closeModalDirect();
-  }).catch(()=>{showToast('Error al añadir. Intenta de nuevo.')});
+    window.location.href='/checkout';
+  }).catch(()=>{showToast('Error. Intenta de nuevo.')});
 }
 
 /* FILTER by product type */
