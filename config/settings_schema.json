@@ -1,0 +1,26 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "PawLove v3",
+    "theme_version": "3.0.0",
+    "theme_author": "PawLove",
+    "theme_documentation_url": "https://github.com/elaslaoui11241999/pawlove-theme",
+    "theme_support_url": "https://github.com/elaslaoui11241999/pawlove-theme"
+  },
+  {
+    "name": "General",
+    "settings": [
+      { "type": "text", "id": "happy_pets", "label": "Mascotas felices", "default": "5.000" },
+      { "type": "text", "id": "discount_code", "label": "Codigo descuento", "default": "PAWLOVE10" }
+    ]
+  },
+  {
+    "name": "Redes sociales",
+    "settings": [
+      { "type": "url", "id": "instagram", "label": "Instagram" },
+      { "type": "url", "id": "tiktok", "label": "TikTok" },
+      { "type": "url", "id": "facebook", "label": "Facebook" },
+      { "type": "url", "id": "youtube", "label": "YouTube" }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+<nav class="navbar">
+  <a href="{{ routes.root_url }}" class="nb-logo"><span class="paw">🐾</span>Paw<span>Love</span></a>
+  <div class="nb-right">
+    <a href="{{ routes.cart_url }}" class="nb-btn">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="nb-badge">{{ cart.item_count }}</span>
+    </a>
+  </div>
+</nav>
+
+<div style="background:var(--cream);min-height:60vh">
+  <div class="container section" style="max-width:720px">
+    <div class="sec-tag">🛒 Tu pedido</div>
+    <h1 class="sec-h">Carrito <em>de compra</em></h1>
+    {% if cart.item_count == 0 %}
+      <div style="text-align:center;padding:60px 0">
+        <div style="font-size:80px;margin-bottom:20px">🛒</div>
+        <p style="color:var(--gray);margin-bottom:32px;font-size:15px">Tu carrito está vacío</p>
+        <a href="/collections/all" class="btn-primary">Ver productos 🐾</a>
+      </div>
+    {% else %}
+      {% form 'cart', cart %}
+        {% for item in cart.items %}
+          <div style="display:flex;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid rgba(44,31,20,.07)">
+            <div style="width:76px;height:76px;border-radius:12px;background:var(--warm);overflow:hidden;flex-shrink:0">
+              {% if item.image %}
+                <img src="{{ item.image | img_url: '160x160' }}" alt="{{ item.title }}" style="width:100%;height:100%;object-fit:cover">
+              {% else %}
+                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px">🐾</div>
+              {% endif %}
+            </div>
+            <div style="flex:1">
+              <div style="font-weight:700;margin-bottom:4px">{{ item.product.title }}</div>
+              <div style="font-size:13px;color:var(--gray)">{{ item.variant.title }}</div>
+              <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:900;margin-top:6px">{{ item.line_price | money }}</div>
+            </div>
+            <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" style="width:52px;text-align:center;border:1px solid rgba(44,31,20,.2);border-radius:8px;padding:7px;font-size:14px">
+          </div>
+        {% endfor %}
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:32px;flex-wrap:wrap;gap:16px">
+          <div>
+            <div style="font-size:13px;color:var(--gray)">Total</div>
+            <div style="font-family:'Fraunces',serif;font-size:34px;font-weight:900">{{ cart.total_price | money }}</div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button type="submit" name="update" class="btn-secondary">Actualizar</button>
+            <a href="/checkout" class="btn-primary">Tramitar pedido →</a>
+          </div>
+        </div>
+      {% endform %}
+    {% endif %}
+  </div>
+</div>

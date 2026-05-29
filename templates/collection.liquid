@@ -1,0 +1,47 @@
+<nav class="navbar">
+  <a href="{{ routes.root_url }}" class="nb-logo"><span class="paw">🐾</span>Paw<span>Love</span></a>
+  <div class="nb-right">
+    <a href="{{ routes.cart_url }}" class="nb-btn">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="nb-badge">{{ cart.item_count }}</span>
+    </a>
+  </div>
+</nav>
+
+<div style="background:var(--cream);min-height:60vh">
+  <div class="container section">
+    <div class="sec-tag">🛒 Tienda</div>
+    <h1 class="sec-h">{{ collection.title | default: 'Todos los' }} <em>productos</em></h1>
+    {% if collection.products_count == 0 %}
+      <p style="color:var(--gray);text-align:center;padding:60px 0;font-size:15px">No hay productos en esta colección todavía.</p>
+    {% else %}
+      <div class="prod-grid">
+        {% for product in collection.products %}
+          <div class="prod-card">
+            <div class="prod-img">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '500x500', crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy">
+              {% else %}
+                <span style="font-size:60px">🐾</span>
+              {% endif %}
+              {% if product.compare_at_price > product.price %}
+                <span class="prod-badge b-sale">Oferta</span>
+              {% endif %}
+              <a href="{{ product.url }}" class="prod-ver">🐾 Ver producto</a>
+            </div>
+            <div class="prod-info">
+              <div class="prod-brand">{{ product.type }}</div>
+              <div class="prod-name">{{ product.title }}</div>
+              <div class="prod-prices">
+                <span class="pp-now">{{ product.price | money }}</span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="pp-old">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

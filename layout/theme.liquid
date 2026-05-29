@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{{ page_title }} — {{ shop.name }}</title>
+<meta name="description" content="{{ page_description | escape }}">
+{{ content_for_header }}
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+{{ 'pawlove.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+<div class="toast" id="toast"></div>
+{{ content_for_layout }}
+<script>
+window.cartCount = {{ cart.item_count }};
+window.shopUrl = "{{ shop.url }}";
+window.routesCart = "{{ routes.cart_url }}";
+window.routesCartAdd = "{{ routes.cart_add_url }}";
+</script>
+{{ 'pawlove.js' | asset_url | script_tag }}
+</body>
+</html>
