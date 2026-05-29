@@ -76,6 +76,23 @@
         </div>
       {% endif %}
 
+      <!-- BANNER URGENCIA -->
+      <div style="background:var(--brown);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:10px">
+        <span style="color:var(--gold);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase">&#x26A1; Oferta disponible por tiempo limitado</span>
+      </div>
+
+      <!-- CUENTA ATRAS -->
+      <div style="background:var(--warm);border-radius:14px;padding:16px;text-align:center">
+        <div style="font-size:12px;color:var(--gray);margin-bottom:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase">La oferta termina en</div>
+        <div style="display:flex;justify-content:center;gap:8px" id="countdown">
+          <div style="text-align:center"><span id="cd-h" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Horas</div></div>
+          <span style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--orange);align-self:flex-start;margin-top:2px">:</span>
+          <div style="text-align:center"><span id="cd-m" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Mins</div></div>
+          <span style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--orange);align-self:flex-start;margin-top:2px">:</span>
+          <div style="text-align:center"><span id="cd-s" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Seg</div></div>
+        </div>
+      </div>
+
       {% form 'product', product %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         <button type="submit" name="checkout" class="btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:17px">
@@ -100,4 +117,23 @@ function swImg(t){
   document.querySelectorAll('.pdp-thumbs img').forEach(i=>i.classList.remove('on'));
   t.classList.add('on');
 }
+
+// Cuenta atras de 24h que se reinicia cada dia
+(function(){
+  function pad(n){return String(n).padStart(2,'0')}
+  function tick(){
+    var now=new Date();
+    var end=new Date(now);
+    end.setHours(23,59,59,0);
+    var diff=Math.max(0,Math.floor((end-now)/1000));
+    var h=Math.floor(diff/3600);
+    var m=Math.floor((diff%3600)/60);
+    var s=diff%60;
+    document.getElementById('cd-h').textContent=pad(h);
+    document.getElementById('cd-m').textContent=pad(m);
+    document.getElementById('cd-s').textContent=pad(s);
+  }
+  tick();
+  setInterval(tick,1000);
+})();
 </script>
