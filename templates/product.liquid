@@ -53,6 +53,23 @@
 
     <!-- INFO -->
     <div class="pdp-info">
+      <!-- BANNER URGENCIA -->
+      <div style="background:var(--brown);border-radius:12px;padding:12px 16px;text-align:center">
+        <span style="color:var(--gold);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase">&#x26A1; Oferta por tiempo limitado</span>
+      </div>
+
+      <!-- CUENTA ATRAS -->
+      <div style="background:var(--warm);border-radius:14px;padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--gray);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase">La oferta termina en</div>
+        <div style="display:flex;justify-content:center;align-items:flex-start;gap:6px">
+          <div style="text-align:center"><div id="cd-h" style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--brown);line-height:1">00</div><div style="font-size:10px;color:var(--gray)">Horas</div></div>
+          <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--orange);line-height:1">:</div>
+          <div style="text-align:center"><div id="cd-m" style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--brown);line-height:1">00</div><div style="font-size:10px;color:var(--gray)">Mins</div></div>
+          <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--orange);line-height:1">:</div>
+          <div style="text-align:center"><div id="cd-s" style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--brown);line-height:1">00</div><div style="font-size:10px;color:var(--gray)">Seg</div></div>
+        </div>
+      </div>
+
       <div class="prod-brand">{{ product.type | default: 'PawLove' }}</div>
 
       <h1 style="font-family:'Fraunces',serif;font-size:clamp(22px,3vw,36px);font-weight:900;line-height:1.1;color:var(--brown)">
@@ -72,26 +89,9 @@
 
       {% if product.description != blank %}
         <div style="font-size:14px;color:var(--gray);line-height:1.9;border-top:1px solid rgba(44,31,20,.07);padding-top:16px">
-          {{ product.description }}
+          {{ product.description | truncate: 400 }}
         </div>
       {% endif %}
-
-      <!-- BANNER URGENCIA -->
-      <div style="background:var(--brown);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:10px">
-        <span style="color:var(--gold);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase">&#x26A1; Oferta disponible por tiempo limitado</span>
-      </div>
-
-      <!-- CUENTA ATRAS -->
-      <div style="background:var(--warm);border-radius:14px;padding:16px;text-align:center">
-        <div style="font-size:12px;color:var(--gray);margin-bottom:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase">La oferta termina en</div>
-        <div style="display:flex;justify-content:center;gap:8px" id="countdown">
-          <div style="text-align:center"><span id="cd-h" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Horas</div></div>
-          <span style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--orange);align-self:flex-start;margin-top:2px">:</span>
-          <div style="text-align:center"><span id="cd-m" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Mins</div></div>
-          <span style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--orange);align-self:flex-start;margin-top:2px">:</span>
-          <div style="text-align:center"><span id="cd-s" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brown)">00</span><div style="font-size:10px;color:var(--gray);margin-top:2px">Seg</div></div>
-        </div>
-      </div>
 
       {% form 'product', product %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
