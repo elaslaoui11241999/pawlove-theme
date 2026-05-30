@@ -110,28 +110,37 @@
       {% assign source = collections.all %}
       {% if section.settings.collection != blank %}{% assign source = collections[section.settings.collection] %}{% endif %}
       {% for product in source.products limit: 50 %}
-        <a href="{{ product.url }}" class="prod-card">
-          <div class="prod-img">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | img_url: '600x600', crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy"/>
-            {% else %}
-              <div style="font-size:60px;display:flex;align-items:center;justify-content:center;height:100%">&#x1F43E;</div>
-            {% endif %}
-            {% if product.compare_at_price > product.price %}
-              {% assign saved_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
-              <span class="prod-badge b-sale">-{{ saved_pct }}%</span>
-            {% elsif product.tags contains 'nuevo' %}<span class="prod-badge b-new">Nuevo</span>
-            {% elsif product.tags contains 'top' %}<span class="prod-badge b-hot">Top</span>{% endif %}
-          </div>
+        {% assign quick_variant = product.selected_or_first_available_variant %}
+        <div class="prod-card">
+          <a href="{{ product.url }}" style="display:block;color:inherit">
+            <div class="prod-img">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '600x600', crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy"/>
+              {% else %}
+                <div style="font-size:60px;display:flex;align-items:center;justify-content:center;height:100%">&#x1F43E;</div>
+              {% endif %}
+              {% if product.compare_at_price > product.price %}
+                {% assign saved_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+                <span class="prod-badge b-sale">-{{ saved_pct }}%</span>
+              {% elsif product.tags contains 'nuevo' %}<span class="prod-badge b-new">Nuevo</span>
+              {% elsif product.tags contains 'top' %}<span class="prod-badge b-hot">Top</span>{% endif %}
+            </div>
+          </a>
           <div class="prod-info">
-            <div class="prod-name">{{ product.title }}</div>
-            <div class="prod-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; <span>({{ product.metafields.reviews.rating_count | default: '&#x2014;' }})</span></div>
+            <a href="{{ product.url }}" style="display:block;color:inherit">
+              <div class="prod-name">{{ product.title }}</div>
+              <div class="prod-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; <span>({{ product.metafields.reviews.rating_count | default: '&#x2014;' }})</span></div>
+            </a>
             <div class="prod-bottom">
               <span class="pp-now">{{ product.price | money }}</span>
-              <span class="prod-buy">&#x1F43E; Comprar</span>
+              {% if quick_variant and product.available %}
+                <button type="button" class="prod-buy" onclick="addToCart('{{ quick_variant.id }}')">&#x1F43E; Comprar</button>
+              {% else %}
+                <a href="{{ product.url }}" class="prod-buy">&#x1F43E; Ver</a>
+              {% endif %}
             </div>
           </div>
-        </a>
+        </div>
       {% else %}
         <p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:40px">Proximamente nuevos productos.</p>
       {% endfor %}
