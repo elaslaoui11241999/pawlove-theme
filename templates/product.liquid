@@ -38,6 +38,7 @@ html,body{overflow-x:hidden;max-width:100vw}
 .var-old{font-size:11px;color:var(--gray2);text-decoration:line-through;text-align:right}
 .var-badge{position:absolute;top:-10px;right:12px;background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px}
 .pay-btn{width:100%;padding:16px;border-radius:14px;font-size:15px;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;box-sizing:border-box}
+.jdgm-widget{margin-top:8px}
 </style>
 
 <div style="background:var(--cream);min-height:80vh;overflow:hidden">
@@ -57,7 +58,9 @@ html,body{overflow-x:hidden;max-width:100vw}
 
     <div class="pdp-info">
       <h1 style="font-family:'Fraunces',serif;font-size:clamp(22px,5vw,34px);font-weight:900;line-height:1.15;color:var(--brown)">{{ product.title }}</h1>
-      <div style="color:var(--gold);font-size:16px">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+      <!-- Start of Judge.me code -->
+      <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>{{ product.metafields.judgeme.badge }}</div>
+      <!-- End of Judge.me code -->
 
       <div class="oferta-banner">
         <div class="oferta-line"></div>
@@ -125,6 +128,16 @@ html,body{overflow-x:hidden;max-width:100vw}
         <strong style="color:var(--brown);display:block;margin-bottom:4px">&#x1F4E6; Envio gratuito</strong>
         Entrega estimada 8-18 dias &#x00B7; Gratis en pedidos +40&#x20AC;
       </div>
+
+      <!-- Start of Judge.me code -->
+      {% assign has_legacy = false %}
+      {% if product.metafields.judgeme.widget.size > 20 %}{% assign has_legacy = true %}{% endif %}
+      <div style='clear:both'></div>
+      <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title | escape }}' data-id='{{ product.id }}' data-product-id='{{ product.id }}' data-widget='review' data-auto-install='false' data-shop-reviews-count='{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}' data-entry-point='review_widget.js' data-entry-key='review-widget/main.js'>
+      {% if has_legacy %}<div class='jdgm-legacy-widget-content' style='display: none;'>{{ product.metafields.judgeme.widget }}</div>{% endif %}
+      </div>
+      {% if product.metafields.judgeme.review_widget_data %}<script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>{% endif %}
+      <!-- End of Judge.me code -->
 
       <a href="javascript:history.back()" style="font-size:13px;color:var(--gray);text-align:center;display:block">&#x2190; Volver</a>
     </div>
